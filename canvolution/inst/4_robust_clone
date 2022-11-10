@@ -1,0 +1,25 @@
+# Robust clone for generating clonal miniumu spanning tree
+source('inst/robust_clone_function.R')
+
+load("lung_seurat_mut")
+#data not provided
+#seurat object; name: d2
+
+pat_list <- unique(d2$pat)
+for (j in c(1:length(pat_list))){
+pat_tmp <- pat_list[j]
+print(pat_tmp)
+load(paste("data/", pat_tmp, "_final_dendro", sep = ""))
+p<-subset(d2, subset = pat == pat_tmp)
+p1 <- na.omit(p$cancer_clone)
+clone_gety<-t(demo_cluster$Z)
+robust_clone <- c()
+for(i in 1:length(unique(p1))){
+    robust_clone <- c(robust_clone,list(which(p1==i)))
+  }
+
+clone_path <- plot_MST(clone_gety, robust_clone, 'SNV', pat_tmp)
+write.table(clone_path, paste(pat_tmp, "_clone_path", sep = ""), sep = "\t", quote=F)
+
+}
+

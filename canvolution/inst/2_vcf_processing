@@ -1,0 +1,36 @@
+#R
+#vcf_list: list of vcf files of each single-cell
+#there should be  "../vcf_new/" directory
+
+
+
+library(vcfR)
+library(ape)
+
+a<-readLines("vcf_list")
+
+for (j in c(1: length(a))){
+	tmp_vcf <- a[j]
+vcf<-read.vcfR(tmp_vcf)
+
+k<-sapply(vcf@fix[,8],function(x) (!grepl("COSMIC",x) & grepl("RS=",x)|grepl("RNAEDIT",x)))
+k1 <- which(k)
+vcf@fix[k1,7] <- "notpass"
+
+vcf1<-vcf[vcf@fix[,7] =="PASS",]
+
+new_name <- paste("../new_vcf/", tmp_vcf, sep = "")
+#there should be  "../vcf_new/" directory
+
+write.vcf(vcf1, file=new_name, mask=TRUE)
+
+}
+
+#bash command
+#https://samtools.github.io/bcftools/bcftools.html#merge
+#merging vcf files from a given patient (or sample)
+#vcf_list: list of vcf files of each single-cell from new_vcf folder (filtered vcf files)
+module load bcftools
+bcftools merge -l patient_vcf_list --no-index -o cell_line_prostate.vcf.gz -0
+
+
