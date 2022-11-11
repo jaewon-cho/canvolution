@@ -50,7 +50,7 @@ return (total_path)
 #' #meta_info <- seurat_obj@meta.data
 #' meta_info <- read.table("data/meta_info_lung", sep = "\t", check.names = F)
 #' name <- "lung"
-#' pat_info <- "pat_collapsed"
+#' pat_info <- "pat_collapse"
 #' sample_info <- "sample_name"
 #' clone_path_file_prefix <- "data/robustclone/"
 #' feature_file_prefix <- "data/feature/"
