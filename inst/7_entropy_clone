@@ -1,0 +1,84 @@
+clone_entropy
+
+#x: given cluster → given clone
+#batch_vector: patient vector → cluster vector
+#N_batches: patient unique length → cluster unique length
+#cluster: cluster vector → clone vector
+
+
+##################################################################################
+#workflow
+
+resolution_list <- c(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.3,1.6,1.9,2.2,2.5,2.8)
+##
+folder <- "lung"
+name <- "lung"
+print(name)
+
+load(paste("~/sfa_jaewon/sc_cancer_evolution/", folder, "/data/final/", name, "_cancer_seurat_mut", sep = ""))
+#loading seurat object: name: d3
+
+pat_list <- d3@meta.data[,pat_category[j]]
+pat_list_uniq <- unique(pat_list)
+
+
+random_res <- c()
+res <- c()
+for (k in c(1:length(pat_list_uniq))){
+	tmp_pat <- pat_list_uniq[k]
+	print(tmp_pat)
+	d3$tmp_select <- 1
+
+	d3$tmp_select[which(pat_list == tmp_pat)] <- 0
+
+	tmp_d <- subset(d3, subset = tmp_select == 0)
+	if (is.na(unique(tmp_d$cancer_clone)) & length(unique(tmp_d$cancer_clone))== 1){
+		next
+	}
+
+	resolution_random <- c()
+	resolution_res <- c()
+	for (m in c(1:length(resolution_list))){
+		resolution <- resolution_list[m]
+
+		d3 <- FindClusters(d3, resolution = resolution, verbose = FALSE)
+		if (name == "lung"){
+			d4 <- subset(d3, pat_collapse !="TH146")
+			#cell count of TH146 is only 2
+		}else{
+			d4<-d3
+		}
+
+		tmp_d <- subset(d4, subset = tmp_select == 0)
+		tmp_d <- subset(tmp_d, subset = cancer_clone != "NA")
+
+
+		tmp_res1 <- clone_shannon_process(tmp_d, 0, tmp_pat)
+		tmp_res2 <- cbind(tmp_res1, resolution)
+		resolution_res <- rbind(resolution_res, tmp_res2)
+
+
+
+
+		rand_res <- random_entropy(as.numeric(tmp_d$seurat_clusters))
+		resolution_random <- cbind(resolution_random, rand_res)
+		colnames(resolution_random)[m] <- resolution
+
+	}	
+
+
+	res<-rbind(res, resolution_res)
+	random_res <- rbind(random_res, resolution_random)
+	rownames(random_res)[dim(random_res)[1]] <- tmp_pat
+
+}
+colnames(res) <- c("entropy", "resolution")
+write.csv(res, paste(name, "_clone_entropy_resolution_test.csv", sep = ""), quote = F)
+write.csv(random_res, paste(name, "_clone_entropy_resolution_test_random.csv", sep = ""), quote = F)
+
+
+
+
+
+
+

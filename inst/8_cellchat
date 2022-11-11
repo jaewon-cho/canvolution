@@ -1,0 +1,154 @@
+library(CellChat)
+library(Seurat)
+
+#CellChatDB$complex, CellChatDB$cofactor → rownames contain complex name
+#celltype: meta information for celltype to use
+
+cellchat_run <- function(a, name, celltype){
+a1<-GetAssayData(a)
+meta<-a@meta.data
+cellchat <- createCellChat(object = a1, meta = meta, group.by = celltype)
+cellchat@DB <- CellChatDB
+cellchat <- subsetData(cellchat)
+cellchat <- identifyOverExpressedGenes(cellchat)
+cellchat <- identifyOverExpressedInteractions(cellchat)
+cellchat <- computeCommunProb(cellchat)
+cellchat <- filterCommunication(cellchat, min.cells = 0)
+#cellchat <- computeCommunProbPathway(cellchat)
+cellchat <- aggregateNet(cellchat)
+save(cellchat, file = paste(name,"_cellchat", sep = ""))
+}
+
+
+##
+rl_ext <- function(df.net, a1,a2){
+	cancer_list <- unique(as.character(a1))
+
+	res<-list()
+	for(j in c(1:length(cancer_list))){
+		cancer_cluster <- cancer_list[j]
+		cancer_pos <- which(a1==cancer_cluster )
+		a2_1 <- a2[cancer_pos]
+		a2_1_uniq <- unique(a2_1)
+
+
+		a2_complex <- intersect(a2_1_uniq, rownames(CellChatDB$complex))
+		if(length(a2_complex) !=0){
+
+			k<-CellChatDB$complex[a2_complex,]
+			k1<-as.matrix(k)
+			k2<-as.character(k1)
+			a2_complex_gn <- unique(k2[k2!=""])
+
+		}
+
+		a2_cofactor <- intersect(a2_1_uniq, rownames(CellChatDB$cofactor))
+		if(length(a2_cofactor) !=0){
+			k<-CellChatDB$complex[a2_cofactor,]
+			k1<-as.matrix(k)
+			k2<-as.character(k1)
+			a2_cofactor_gn <- unique(k2[k2!=""])
+
+		}
+
+		a2_1_diff <- setdiff(a2_1_uniq, a2_complex)
+		a2_tot <- setdiff(a2_1_diff, a2_cofactor)
+		if(length(a2_cofactor) !=0){
+			a2_tot <- union(a2_tot, a2_cofactor_gn)
+		}
+		if(length(a2_complex) !=0){
+			a2_tot<-union(a2_tot, a2_complex_gn)
+		}
+
+
+		a2_tot_uniq <- unique(a2_tot)
+		res[[j]] <- a2_tot_uniq
+		names(res)[j] <- cancer_cluster
+
+	}
+	return (res)
+}
+
+
+cellchat_rl <- function(name){
+	load(paste(name, "_cellchat", sep = ""))
+	df.net <- subsetCommunication(cellchat)
+	a<-grepl("cancer", df.net$source)
+	b<-grepl("cancer", df.net$target)
+	can <- a&b
+
+	a1<-df.net$source[can]
+	a2 <- df.net$ligand[can]
+
+	res<- list()
+
+	cancer_only_source <- rl_ext(df.net, a1,a2)
+	res[[1]] <- cancer_only_source
+	names(res)[1] <- "cancer"
+
+	source_nocan <- a&!b
+	a1<-df.net$source[source_nocan]
+	a2 <- df.net$ligand[source_nocan]
+	a3<-df.net$target[source_nocan]
+
+	tmp_cell_list <- unique(as.character(a3))
+	for (j in c(1:length(tmp_cell_list))){
+		cell <- tmp_cell_list[j]
+		a4 <- which(a3 == cell)
+
+		a1_1 <- a1[a4]
+		a2_1 <- a2[a4]
+		tmp_cell_source <- rl_ext(df.net, a1_1,a2_1)
+		res[[j+1]] <- tmp_cell_source
+		names(res)[j+1] <- cell
+	}
+	save(res, file = paste(name, "_source_gn", sep = ""))
+
+	a<-grepl("cancer", df.net$source)
+	b<-grepl("cancer", df.net$target)
+	can <- a&b
+
+	a1<-df.net$target[can]
+	a2 <- df.net$receptor[can]
+
+	res<- list()
+
+	cancer_only_target <- rl_ext(df.net, a1,a2)
+	res[[1]] <- cancer_only_target
+	names(res)[1] <- "cancer"
+
+	target_nocan <- !a&b
+	a1<-df.net$target[target_nocan]
+	a2 <- df.net$receptor[target_nocan]
+	a3<-df.net$source[target_nocan]
+
+	tmp_cell_list <- unique(as.character(a3))
+	for (j in c(1:length(tmp_cell_list))){
+		cell <- tmp_cell_list[j]
+		a4 <- which(a3 == cell)
+
+		a1_1 <- a1[a4]
+		a2_1 <- a2[a4]
+		tmp_cell_target <- rl_ext(df.net, a1_1,a2_1)
+		res[[j+1]] <- tmp_cell_target
+		names(res)[j+1] <- cell
+	}
+
+
+	save(res, file = paste(name, "_target_gn", sep = ""))
+}
+
+
+
+
+
+CellChatDB <- CellChatDB.human
+
+load("../../data/final/lung_seurat_mut_final")
+#seurat object, name: d2
+
+cellchat_jw(d2, "lung", "celltype_cancer")
+
+##
+cellchat_rl("lung")
+
