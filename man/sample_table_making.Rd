@@ -30,10 +30,10 @@ for (j in c(1:length(meta_info_list))){
  meta_list <- as.character(meta_info[,meta_info_tmp])
  meta_table <- rbind(meta_table, meta_list)
  rownames(meta_table)[j] <- meta_info_tmp
- }
- sample_name <- sample_list_uniq[1]
- sample_position <- which(sample_list == sample_name)
- tmp_file_name <- paste(file_prefix, sample_name,file_suffix, sep = "")
- a2<-sample_table_making(tmp_file_name, sample_name, sample_position, meta_table)
+}
+sample_name <- sample_list_uniq[1]
+sample_position <- which(sample_list == sample_name)
+tmp_file_name <- paste(file_prefix, sample_name,file_suffix, sep = "")
+a2<-sample_table_making(tmp_file_name, sample_name, sample_position, meta_table)
 
 }

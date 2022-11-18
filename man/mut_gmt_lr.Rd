@@ -4,7 +4,13 @@
 \alias{mut_gmt_lr}
 \title{mut_gmt_lr}
 \usage{
-mut_gmt_lr(sample_list, file_prefix, name)
+mut_gmt_lr(
+  sample_list,
+  file_prefix,
+  name,
+  clone_info_prefix,
+  clone_info_suffix
+)
 }
 \arguments{
 \item{sample_list}{list of samples}
@@ -12,6 +18,10 @@ mut_gmt_lr(sample_list, file_prefix, name)
 \item{file_prefix}{prefix of lr file}
 
 \item{name}{title of the data}
+
+\item{clone_info_prefix}{prefix of clone_info}
+
+\item{clone_info_suffix}{suffix of clone_info}
 }
 \value{
 jaccard coefficient between LR gene and counter celltypes for each clone in the sample
@@ -20,5 +30,5 @@ jaccard coefficient between LR gene and counter celltypes for each clone in the 
 jaccard coefficient between LR gene and counter celltypes for each clone in the sample
 }
 \examples{
-mut_gmt_lr(sample_list, "data/cellchat/", "lung")
+mut_gmt_lr(sample_list, "data/cellchat/", "lung", "data/clone_mutation_info/", "_clone_mut_list")
 }

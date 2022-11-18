@@ -31,6 +31,6 @@ gmt <- getGmt("lung_gmt")
 gmt_list$specific_fitness <- gmt
 gmt <- getGmt("lung_gmt")
 gmt_list$ctg <- gmt
-mut_gmt(seurat_object, gmt_list, "lung")
+addmodulescore_multiple_pathway(seurat_object, gmt_list, "lung")
 
 }
