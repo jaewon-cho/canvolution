@@ -77,7 +77,7 @@ feature_graph <- function(total_table, feature_size){
 #' \item new_a: new table of mean feature score in each clusters  
 #' \item module_info: list object contains cluster member information for each feature
 #' \item g6: igraph object after thresholding
-#' \item g4: g4<-components(g6) [defining connected components by igraph]
+#' \item g4: g4<-components(g6) (defining connected components by igraph)
 #' }
 #'
 #' @examples
@@ -205,7 +205,7 @@ clustering_plot <- function(g6, clustering_res, name, layout = "layout_with_fr",
 #' \item new_a: new table of mean feature score in each clusters
 #' \item module_info: list object contains cluster member information for each feature
 #' \item g3: initial input igraph object
-#' \item g4: g4<-components(g6) [defining connected components by igraph]
+#' \item g4: g4<-components(g6) (defining connected components by igraph)
 #' }
 #'
 #'
