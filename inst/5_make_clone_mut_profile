@@ -1,7 +1,6 @@
 ccds <- readLines("~/sfa_jaewon/ccds/human/210718/CCDS_public_gn")
 # if there is CCDS gene list, otherwise make vector for full gene list (ex: c("PDCD1", "LAG3", "CTLA4" ...)
-# dendro file name: patient_final_dendro (patient: TH225)
-# ex: TH225_final_dendro
+# dendro file name: patient_final_dendro (patient: TH225 -> TH225_final_dendro)
 
 make_mut_list <- function(sample_list_uniq, sample_pat, dendro_directory){
 	for (j in c(1:length(sample_list_uniq))){

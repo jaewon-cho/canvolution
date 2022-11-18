@@ -147,7 +147,7 @@ CellChatDB <- CellChatDB.human
 load("../../data/final/lung_seurat_mut_final")
 #seurat object, name: d2
 
-cellchat_jw(d2, "lung", "celltype_cancer")
+cellchat_run(d2, "lung", "celltype_cancer")
 
 ##
 cellchat_rl("lung")

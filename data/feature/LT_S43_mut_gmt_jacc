@@ -1,0 +1,16 @@
+clone_1	clone_2	clone_3	clone_4
+Angiogenesis	0	0	0	0
+Apoptosis	0	0	0.0078125	0
+Cell_Cycle	0	0	0	0
+Differentiation	0	0	0.0114942528735632	0
+DNA_damage	0	0	0.00584795321637427	0
+DNA_repair	0	0	0.00552486187845304	0
+EMT	0	0	0	0
+Hypoxia	0	0	0	0
+Inflammation	0	0	0.00574712643678161	0
+Invasion	0	0	0	0
+Metastasis	0.00568181818181818	0	0.00881057268722467	0
+Proliferation	0	0	0	0
+Quiescence	0	0	0.0158730158730159	0
+Stemness	0	0	0.00446428571428571	0
+core_fitness	0	0	0.0065359477124183	0

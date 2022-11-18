@@ -68,7 +68,7 @@ mutation_from_path <- function(path, sample, sample_clone_mut_list, feature_gn, 
 	res<-list()
 	for (j in c(1:length(clone_list))){
 		clone <- clone_list[j]
-		mut_gn <- sample_clone_mut_list[[clone]]
+		mut_gn <- sample_clone_mut_list[[1]][[clone]]
 		if (feature_gn != "all"){
 			mut_gn <- intersect(mut_gn, feature_gn)
 		}

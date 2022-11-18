@@ -85,7 +85,7 @@ path_gmt_lr<-function(res, gn, pre_name){
 #' gmt_list$specific_fitness <- gmt
 #' gmt <- getGmt("lung_gmt")
 #' gmt_list$ctg <- gmt
-#' mut_gmt(sample_list, gmt_list, "data/clone_mutation_info/", "_clone_mut_list")
+#' mut_gmt(sample_list, sample_clone_mut_list, gmt_list, "data/clone_mutation_info/", "_clone_mut_list")
 #' @export
 mut_gmt <- function(sample_list, gmt_list, clone_info_prefix,clone_info_suffix){
 	for (j in c(1:length(sample_list))){
@@ -97,13 +97,14 @@ mut_gmt <- function(sample_list, gmt_list, clone_info_prefix,clone_info_suffix){
 		for (k in c(1:length(clone_list))){
 			clone_name <- clone_list[k]
 			gn <- sample_clone_mut_list[[k]]
+			gmt_res <- c()
 			for (m in c(1:length(gmt_list))){
 				gmt <- gmt_list[[m]]
 				tmp_gmt_res <- path_gmt(gmt, gn)
 				gmt_res <- c(gmt_res, tmp_gmt_res)
 			}
 ###
-			res<-cbind(res, tmp_res)
+			res<-cbind(res, gmt_res)
 
 			colnames(res)[k] <- clone_name
 		}
@@ -172,7 +173,7 @@ path_module<-function(gmt, d, total_gn){
 #' gmt_list$specific_fitness <- gmt
 #' gmt <- getGmt("lung_gmt")
 #' gmt_list$ctg <- gmt
-#' mut_gmt(seurat_object, gmt_list, "lung")
+#' addmodulescore_multiple_pathway(seurat_object, gmt_list, "lung")
 #'
 #' @export
 #cluster name: seurat_clusters
@@ -198,18 +199,22 @@ addmodulescore_multiple_pathway <- function(d3, gmt_list, name){
 #' @param sample_list list of samples
 #' @param file_prefix prefix of lr file
 #' @param name title of the data
+#' @param clone_info_prefix prefix of clone_info
+#' @param clone_info_suffix suffix of clone_info
 #'
 #' @return jaccard coefficient between LR gene and counter celltypes for each clone in the sample
 #'
 #' @examples
-#' mut_gmt_lr(sample_list, "data/cellchat/", "lung")
+#' mut_gmt_lr(sample_list, "data/cellchat/", "lung", "data/clone_mutation_info/", "_clone_mut_list")
 #' @export
-mut_gmt_lr <- function(sample_list, file_prefix, name){
+mut_gmt_lr <- function(sample_list, file_prefix, name, clone_info_prefix,clone_info_suffix){
 
 ##
 	for (j in c(1:length(sample_list))){
 		pat_tmp <- sample_list[j]
 		print(pat_tmp)
+                load(paste(clone_info_prefix,pat_tmp, clone_info_suffix, sep = ""))
+
 		clone_list <- names(sample_clone_mut_list)
 		for (k in c(1:length(clone_list))){
 			clone_name <- clone_list[k]
