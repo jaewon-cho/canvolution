@@ -13,10 +13,7 @@ Roxygen: list(markdown = TRUE)
 LazyData: true
 Imports:
 	Seurat,
-	MASS,
 	igraph (>= 1.3.4),
 	reshape,
 	ggplot2,
-	dplyr,
-	GSEABase
 RoxygenNote: 7.1.2
