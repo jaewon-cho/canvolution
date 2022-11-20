@@ -141,7 +141,7 @@ evolution_mut_corr_samplewise <- function(meta_info, name, pat_info, sample_info
 
 
 
-		write.table(total_path_scc, paste(output_file_prefix, sample, "_clone_evolution_mut_scc_sample", sep = ""), quote = F, sep = "\t") 
+		write.table(total_path_scc, paste(output_file_prefix, name, "_", sample, "_clone_evolution_mut_scc_sample", sep = ""), quote = F, sep = "\t") 
 
 	}
 }
@@ -758,8 +758,8 @@ evolution_clone_abundance_mut_corr_samplewise <- function(meta_info, name, pat_i
 			path_order_name <- paste(sample, tmp, sep = "__")
 			
 			path_order_abundance <- paste("clone", path_order1, sep ="_")
-			path_order_abundance2  <- paste(pat, path_order1, sep ="_")
-			a3_1 <- a2_1[,path_order_abundance2]
+			#path_order_abundance2  <- paste(pat, path_order1, sep ="_")
+			a3_1 <- a2_1[,path_order_abundance]
 			a3<-a2[sample, path_order_abundance]
 
 
@@ -892,7 +892,7 @@ evolution_clone_abundance_transcriptomic_corr_samplewise <- function(meta_info, 
 			
 			path_order <- paste(sample, path_order1, sep ="_")
 			path_order_abundance <- paste("clone", path_order1, sep ="_")
-			path_order_abundance2  <- paste(pat, path_order1, sep ="_")
+			#path_order_abundance2  <- paste(pat, path_order1, sep ="_")
 			a3_1 <- a2_1[sample,path_order_abundance]
 
 

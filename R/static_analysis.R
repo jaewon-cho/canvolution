@@ -27,7 +27,7 @@
 #' @export
 sample_table_making <- function(tmp_file_name, sample_name, sample_position, meta_table){
 	a <- read.delim(tmp_file_name, check.names = F, sep = "\t")
-	a2 <- t(a1)
+	a2 <- t(a)
 	a2<-cbind(a2, sample_name)
 	colnames(a2)[dim(a2)[2]] <- "sample"
 
@@ -123,7 +123,7 @@ sample_table_making_mut_trans <- function(tmp_file_name, sample_name, sample_pos
 #' generate_table_for_analysis
 #'
 #' making a table for statistic analysis
-#'
+#ult <- generate_table_for_analysis(name, meta_info, pat_info, sample_info, meta_info_list,file_prefix, file_suffix)
 #' @param name title for the data
 #' @param meta_info meta information
 #' @param pat_info variable name for patient
@@ -141,9 +141,9 @@ sample_table_making_mut_trans <- function(tmp_file_name, sample_name, sample_pos
 #' pat_info <- "pat_collapsed"
 #' sample_info <- "sample_name"
 #' meta_info_list <- c("primary_or_metastaic","biopsy_site","smokingHx","histolgy","best_rxn_status")
-#' file_prefix <- "data/"
+#' file_prefix <- "./"
 #' file_suffix <- "_clone_abundance_mut_scc_sample"
-#' result_suffix <- "evolution_mut_transcriptome_scc_analysis"
+#' result_suffix <- "abundance_mut_scc_analysis"
 #' result <- generate_table_for_analysis(name, meta_info, pat_info, sample_info, meta_info_list,file_prefix, file_suffix)
 #' total_table <- result[[1]]
 #' feature_size <- result[[2]]
@@ -160,7 +160,7 @@ generate_table_for_analysis <- function(name, meta_info, pat_info, sample_info, 
 		rownames(meta_table)[j] <- meta_info_tmp
 	}
 
-
+	meta_length <- length(meta_info_list)
 	total_table <- c()
 
 	for (j in c(1:length(sample_list_uniq))){
@@ -168,7 +168,7 @@ generate_table_for_analysis <- function(name, meta_info, pat_info, sample_info, 
 		sample_position <- which(sample_list == sample_name)
 
 
-		tmp_file_name <- paste(file_prefix, sample_name,file_suffix, sep = "")
+		tmp_file_name <- paste(file_prefix, name, "_", sample_name,file_suffix, sep = "")
 		if(file.exists(tmp_file_name)){
 			if (mut_trans_index){
 				a2<-sample_table_making_mut_trans(tmp_file_name, sample_name, sample_position, meta_table)
@@ -176,13 +176,34 @@ generate_table_for_analysis <- function(name, meta_info, pat_info, sample_info, 
 				a2<-sample_table_making(tmp_file_name, sample_name, sample_position, meta_table)
 			}
 			a2<-data.frame(a2)
+
+
 			if (j != 1){
-				if(dim(a2)[2] < dim(total_table)[2]){
-					a2<-t(a2)
-					a2<-data.frame(a2)
-					a3<-a2[colnames(total_table),]
-					rownames(a3) <- colnames(total_table)
-					a2<-t(a3)
+				p1<-a2[,1:(dim(a2)[2] - meta_length-1)]
+				p1_2 <- a2[(dim(a2)[2] - meta_length): dim(a2)[2]]
+	                        p2<-total_table[,1:(dim(total_table)[2] - meta_length-1)]
+        	                p2_2 <- total_table[(dim(total_table)[2] - meta_length): dim(total_table)[2]]
+
+                	        new_col <- union(colnames(p1), colnames(p2))
+
+
+				if(length(new_col) != dim(p1)[2]){
+					p1<-t(p1)
+					p1<-data.frame(p1)
+					p1_1<-p1[new_col,]
+					rownames(p1_1)<-new_col
+					p1<-t(p1_1)
+					a2 <- cbind(p1, p1_2)
+
+				}
+				if (length(new_col) != dim(p2)[2]){
+					p2<-t(p2)
+                                        p2<-data.frame(p2)
+                                        p2_1<-p2[new_col,]
+                                        rownames(p2_1)<-new_col
+                                        p2<-t(p2_1)
+                                        total_table <- cbind(p2, p2_2)
+						
 				}
 			}
 			total_table <- rbind(total_table, a2)
@@ -295,7 +316,7 @@ statistic_test<-function(total_table, feature_size, meta_info_input, method, nam
 
 	statistic_res<-statistic_res[order(statistic_res$pval, decreasing = T),]
 
-	write.csv(statistic_res, file = paste(name, "/",name, "_", meta_info_input, "_", result_suffix, "_comparison.csv", sep =""), quote = F)
+	write.csv(statistic_res, file = paste(name, "_", meta_info_input, "_", result_suffix, "_comparison.csv", sep =""), quote = F)
 	if (plot_index){
 		if (format == "png"){
 			png(paste(name, "_", meta_info_input, "_", result_suffix, "_comparison.png", sep =""), width = width, height= height, res = resolution)

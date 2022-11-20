@@ -45,9 +45,9 @@ name <- "lung"
 pat_info <- "pat_collapsed"
 sample_info <- "sample_name"
 meta_info_list <- c("primary_or_metastaic","biopsy_site","smokingHx","histolgy","best_rxn_status")
-file_prefix <- "data/"
+file_prefix <- "./"
 file_suffix <- "_clone_abundance_mut_scc_sample"
-result_suffix <- "evolution_mut_transcriptome_scc_analysis"
+result_suffix <- "abundance_mut_scc_analysis"
 result <- generate_table_for_analysis(name, meta_info, pat_info, sample_info, meta_info_list,file_prefix, file_suffix)
 total_table <- result[[1]]
 feature_size <- result[[2]]
