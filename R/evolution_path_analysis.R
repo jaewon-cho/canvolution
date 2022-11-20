@@ -327,7 +327,7 @@ evolution_signature_cellwise_samplewise <- function(meta_info, name, pat_info, s
 #' @export
 
 clone_cluster_weighted_lr<- function(meta_info, name, pat_info, sample_info, cluster_info, clone_path_file_prefix, feature_file_prefix, output_file_prefix, cell_cnt_thr=10){
-		sample_list <- as.character(meta_info[,sample_info])
+	sample_list <- as.character(meta_info[,sample_info])
         sample_list_uniq <- unique(sample_list)
 
         pat_list <- as.character(meta_info[,pat_info])
@@ -408,7 +408,7 @@ clone_cluster_weighted_lr<- function(meta_info, name, pat_info, sample_info, clu
 								}
 
 
-								tmp_clone1 <- paste(pat, tmp_clone, sep = "_")
+								tmp_clone1 <- paste("clone", tmp_clone, sep = "_")
 								if (!(tmp_clone1 %in% colnames(b2))){
 									next
 								}
@@ -467,7 +467,7 @@ clone_cluster_weighted_lr<- function(meta_info, name, pat_info, sample_info, clu
 
 
                     single_path_scc <- c()
-                    for(m in c(1: dim(a3)[1])){
+                    for(m in c(1: dim(new_res)[1])){
                             spearman <- cor.test(c(1:dim(new_res)[2]), as.numeric(new_res[m,]), method = "spearman")
                             val <- spearman$estimate
 
@@ -1075,7 +1075,7 @@ clone_cluster_weighted_lr_abundance <- function(meta_info, name, pat_info, sampl
                                                                 }
 
 
-                                                                tmp_clone1 <- paste(pat, tmp_clone, sep = "_")
+                                                                tmp_clone1 <- paste("clone", tmp_clone, sep = "_")
                                                                 if (!(tmp_clone1 %in% colnames(b2))){
                                                                         next
                                                                 }
@@ -1134,7 +1134,7 @@ clone_cluster_weighted_lr_abundance <- function(meta_info, name, pat_info, sampl
 
 
                     single_path_scc <- c()
-                    for(m in c(1: dim(a3)[1])){
+                    for(m in c(1: dim(new_res)[1])){
                             spearman <- cor.test(as.numeric(az4[,colnames(new_res)]), as.numeric(new_res[m,]), method = "spearman")
                             val <- spearman$estimate
 

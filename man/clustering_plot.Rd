@@ -50,7 +50,7 @@ module_info_new <- new_result[[2]]
 feature_size_new <- length(module_info_new)
 g6<-new_result[[3]]
 clustering_res <- new_result[[4]]
-clustering_plot(g6,clustering_res,"myplot")
+clustering_plot(g6,clustering_res,"myplot.png")
 
 [2: plotting louvain clustering]
 new_result1 <- feature_clustering_louvain(g6, total_table_pre, feature_size_pre, resolution = 1.1)
@@ -59,5 +59,5 @@ module_info <- new_result1[[2]]
 feature_size <- length(module_info)
 g3<-new_result1[[3]]
 g4<-new_result1[[4]]
-clustering_plot(g3,g4,"myplot")
+clustering_plot(g3,g4,"myplot.png")
 }
