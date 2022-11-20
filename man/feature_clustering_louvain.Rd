@@ -21,7 +21,7 @@ list(new_a, module_info, g3, g4)
 \item new_a: new table of mean feature score in each clusters
 \item module_info: list object contains cluster member information for each feature
 \item g3: initial input igraph object
-\item g4: g4<-components(g6) \link{defining connected components by igraph}
+\item g4: g4<-components(g6)
 }
 }
 \description{

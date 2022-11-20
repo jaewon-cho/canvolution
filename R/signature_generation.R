@@ -214,7 +214,7 @@ mut_gmt_lr <- function(sample_list, file_prefix, name, clone_info_prefix,clone_i
 		pat_tmp <- sample_list[j]
 		print(pat_tmp)
                 load(paste(clone_info_prefix,pat_tmp, clone_info_suffix, sep = ""))
-
+		res2 <- c()
 		clone_list <- names(sample_clone_mut_list)
 		for (k in c(1:length(clone_list))){
 			clone_name <- clone_list[k]
@@ -233,7 +233,7 @@ mut_gmt_lr <- function(sample_list, file_prefix, name, clone_info_prefix,clone_i
 
 			colnames(res2)[dim(res2)[2]] <- clone_name
 		}
-		write.table(res, paste(pat_tmp, "_mut_LR_jacc",sep = ""), quote = F, sep = "\t")
+		write.table(res2, paste(pat_tmp, "_mut_LR_jacc",sep = ""), quote = F, sep = "\t")
 
 #
 	}
