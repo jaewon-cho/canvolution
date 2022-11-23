@@ -27,10 +27,6 @@ gmt <- getGmt("core_gmt")
 gmt_list$core_fitness <- gmt
 gmt <- getGmt("lung_cm_gmt")
 gmt_list$cancermine <- gmt
-gmt <- getGmt("lung_gmt")
-gmt_list$specific_fitness <- gmt
-gmt <- getGmt("lung_gmt")
-gmt_list$ctg <- gmt
 addmodulescore_multiple_pathway(seurat_object, gmt_list, "lung")
-
+#cluster name: seurat_clusters
 }

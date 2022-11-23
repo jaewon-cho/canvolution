@@ -29,9 +29,5 @@ gmt <- getGmt("core_gmt")
 gmt_list$core_fitness <- gmt
 gmt <- getGmt("lung_cm_gmt")
 gmt_list$cancermine <- gmt
-gmt <- getGmt("lung_gmt")
-gmt_list$specific_fitness <- gmt
-gmt <- getGmt("lung_gmt")
-gmt_list$ctg <- gmt
 mut_gmt(sample_list, sample_clone_mut_list, gmt_list, "data/clone_mutation_info/", "_clone_mut_list")
 }

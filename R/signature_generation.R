@@ -81,10 +81,6 @@ path_gmt_lr<-function(res, gn, pre_name){
 #' gmt_list$core_fitness <- gmt
 #' gmt <- getGmt("lung_cm_gmt")
 #' gmt_list$cancermine <- gmt
-#' gmt <- getGmt("lung_gmt")
-#' gmt_list$specific_fitness <- gmt
-#' gmt <- getGmt("lung_gmt")
-#' gmt_list$ctg <- gmt
 #' mut_gmt(sample_list, sample_clone_mut_list, gmt_list, "data/clone_mutation_info/", "_clone_mut_list")
 #' @export
 mut_gmt <- function(sample_list, gmt_list, clone_info_prefix,clone_info_suffix){
@@ -169,14 +165,9 @@ path_module<-function(gmt, d, total_gn){
 #' gmt_list$core_fitness <- gmt
 #' gmt <- getGmt("lung_cm_gmt")
 #' gmt_list$cancermine <- gmt
-#' gmt <- getGmt("lung_gmt")
-#' gmt_list$specific_fitness <- gmt
-#' gmt <- getGmt("lung_gmt")
-#' gmt_list$ctg <- gmt
 #' addmodulescore_multiple_pathway(seurat_object, gmt_list, "lung")
-#'
+#' #cluster name: seurat_clusters
 #' @export
-#cluster name: seurat_clusters
 addmodulescore_multiple_pathway <- function(d3, gmt_list, name){
 	total_gn <- rownames(d3)
 
@@ -241,5 +232,86 @@ mut_gmt_lr <- function(sample_list, file_prefix, name, clone_info_prefix,clone_i
 } 
 
 
+#' mut_gmt_module
+#'
+#' mean expression of mutated gene of a given pathway in each clone
+#'
+#' @param exp expression matrix
+#' @param meta_info seurat_obj@meta.data
+#' @param sample_info variable name for sample in the "meta_info"
+#' @param gmt_list gmt list
+#' @param clone_info_prefix prefix of clone_info
+#' @param clone_info_suffix suffix of clone_info
+#' @param name title of the data
+#'
+#' @return mean expression of pathways by (mutated) gene expression for each clone in the sample (multiple pathways)
+#'
+#' @examples
+#' gmt_list <- list()
+#' gmt <- getGmt("cancersea_gmt")
+#' gmt_list$cancersea<- gmt
+#' gmt <- getGmt("core_gmt")
+#' gmt_list$core_fitness <- gmt
+#' gmt <- getGmt("lung_cm_gmt")
+#' gmt_list$cancermine <- gmt
+#' load("your_seurat_object")
+#' #object name: d3
+#' sample_info <- "sample_name"
+#' exp <- GetAssayData(d3)
+#' meta_info <- d3@meta.data
+#' name <- "lung"
+#' clone_info_prefix <- "data/clone_mutation_info/"
+#' clone_info_suffix <- "_clone_mut_list"
+#' mut_gmt_module(exp, meta_info, sample_info, gmt_list, clone_info_prefix,clone_info_suffix, name)
+#' @export
+mut_gmt_module <- function(exp, meta_info, sample_info, gmt_list, clone_info_prefix,clone_info_suffix, name){
+sample_list <- as.character(meta_info[,sample_info])
+sample_list_uniq <- unique(sample_list)
+clone_list <- as.character(meta_info[,"cancer_clone"])
+	clone_list <- paste("clone", clone_list, sep = "_")
+
+total_gn <- rownames(exp)
+res <- c()
+for (m in c(1:length(gmt_list))){
+	gmt <- gmt_list[[m]]
+	print(names(gmt_list)[m])
+	for(i in c(1:length(gmt@.Data))){
+		path_gn <- gmt@.Data[[i]]@geneIds
+		path <- gmt@.Data[[i]]@setName
+	
+	tmp_res <- rep(0, dim(exp)[2])
+		for (j in c(1:length(sample_list_uniq))){
+			pat_tmp <- sample_list_uniq[j]
+load(paste(clone_info_prefix,pat_tmp, clone_info_suffix, sep = ""))
+
+
+
+clone_list2 <- names(sample_clone_mut_list)
+
+for (k in c(1:length(clone_list2))){
+clone_name <- clone_list2[k]
+					tmp_clone_list <- paste("clone", clone_list, sep = "_")
+clone_loc <- (which(sample_list == pat_tmp & clone_list == clone_name))
+gn <- sample_clone_mut_list[[k]]
+tmp_path_gn <- intersect(gn, path_gn)
+path_gn1 <- intersect(tmp_path_gn, total_gn)
+
+if (length(path_gn1) < 1){
+next
+}
+
+tmp_exp<- exp[path_gn1, clone_loc, drop = F]
+tmp_exp2 <- apply(tmp_exp, 2, mean)
+tmp_res[clone_loc] <- tmp_exp2
+}
+}
+res <- rbind(res, tmp_res)
+rownames(res)[dim(res)[1]] <- path
+}
+	}
+colnames(res) <- colnames(exp)
+	write.table(res, paste(name, "_mut_gmt_addmodule",sep = ""), quote = F, sep = "\t")
+
+}
 
 
