@@ -7,14 +7,14 @@ devtools::install_github("jaewon-cho/canvolution",ref = "master")
 ```
 
 ## required libraries
-library(Seurat)
-library(igraph)
-#version >= 1.3.4
-library(reshape)
-library(ggplot2)
+* library(Seurat)
+* library(igraph)
+* #version >= 1.3.4
+* library(reshape)
+* library(ggplot2)
 
 ## Preprocessing
-Address
+Please see "preprocess.md" file while making the "required files"
 
 ## Required files (must match the format)
 * 1: Seurat object with clonotype for each cancer cell (name of metadata should be “cancer_clone”)
