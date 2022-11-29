@@ -236,9 +236,9 @@ cellchat_rl("lung")
 ```
 
 * Output: data/cellchat/lung_source_gn, data/cellchat/lung_target_gn
-** source_gn: source from cancer cell
-** target_gn: target from cancer cell
-** List object name: res
+* source_gn: source from cancer cell
+* target_gn: target from cancer cell
+* List object name: res
 
 * Usage
 ``` r
