@@ -217,8 +217,7 @@ a <- read.csv("data/lung_clone_ratio.csv")
 ## 8. Inferring cell-cell interaction
 We used CellChat package for inferring cell-cell interaction. 
 (https://github.com/sqjin/CellChat)
-(citation: Jin, S. et al. Inference and analysis of cell-cell communication using CellChat. Nat Commun 12, 1088, doi:10.1038/s41467-021-21246-9 (2021).)
-Cancer clustering (by gene expression) should be done beforehand. Basically, users can use their own package with the same format of output.
+(citation: Jin, S. et al. Inference and analysis of cell-cell communication using CellChat. Nat Commun 12, 1088, doi:10.1038/s41467-021-21246-9 (2021).) This will generate Ligand-receptor pairs between each cancer cluster and the other celltypes. Thus, cancer clustering (by gene expression) should be done beforehand. Basically, users can use their own package with the same format of output.
 
 * Script: inst/8_cellchat
 
@@ -237,9 +236,9 @@ cellchat_rl("lung")
 ```
 
 * Output: data/cellchat/lung_source_gn, data/cellchat/lung_target_gn
-source_gn: source from cancer cell
-target_gn: target from cancer cell
-List object name: res
+** source_gn: source from cancer cell
+** target_gn: target from cancer cell
+** List object name: res
 
 * Usage
 ``` r
