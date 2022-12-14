@@ -2,7 +2,7 @@ library(CellChat)
 library(Seurat)
 
 #CellChatDB$complex, CellChatDB$cofactor → rownames contain complex name
-#celltype: meta information for celltype to use
+#celltype: meta information for celltype to use, it should contain cancer clusters
 
 cellchat_run <- function(a, name, celltype){
 a1<-GetAssayData(a)
