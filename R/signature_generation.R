@@ -314,4 +314,103 @@ colnames(res) <- colnames(exp)
 
 }
 
+#' lr_gmt
+#'
+#' make cellchat result into list format
+#'
+#' @param source list object of (ligand gene from cancer)
+#' @param target list object of (receptor gene from cancer)
+#' @param name title of the data
+#'
+#' @return list variable composed of geneset for each source/target of counter_celltype
+#'
+#' @examples
+#' name <- "lung"
+#' 
+#' load(paste("../cellchat/",name, "_target_gn", sep = ""))
+#' target<- res
+#' load(paste("../cellchat/",name, "_source_gn", sep = ""))
+#' source<- res
+#' res <- lr_gmt(source, target, name)
+#' save(res, file = paste(name, "_cellchat_gmt", sep = "")) 
+#'
+#' @export
+lr_gmt <- function(source, target, name){
+	
+	res <- list()
+	
+	for (m in c(1:length(source))){
+		cell <- names(source)[m]
+		cell1 <- paste("source",cell, sep = "__")
+		cell1 <- gsub("-", ".",cell1)
+		gn <- c()
+		for (k in c(1:length(source[[m]]))){
+			gn <- c(gn, source[[m]][[k]])
+		}
+		gn <- unique(gn)
+		res[[m]] <- gn
+		names(res)[m] <- cell1	
+		
+	}
+	for (m in c(1:length(target))){
+				
+		cell <- names(target)[m]
+		cell1 <- paste("target",cell, sep = "__")
+		cell1 <- gsub("-", ".",cell1)
+		gn <- c()
+		for (k in c(1:length(source[[m]]))){
+			gn <- c(gn, source[[m]][[k]])
+		}
+		gn <- unique(gn)
+		res[[length(res)+1]] <- gn
+		names(res)[length(res)] <- cell1	
+
+	}	
+	return (res)
+	
+} 
+
+#' lr_module
+#'
+#' addmodulescore of each source/target gene in each cancer cell
+#'
+#' @param res object from lr_gmt
+#' @param d seurat object
+#' @param total_gn total gene list in the seurat object
+#'
+#' @return signature score of LR by gene expression for each cancer cell in the sample 
+#'
+#' @examples
+#' name <- "lung"
+#' print(name)
+#' load(paste(name, "_cellchat_gmt", sep = ""))
+#' #cellchat gmt object name: res (from lr_gmt)
+#' load(paste(name, "_cancer_seurat_mut", sep = ""))
+#' #seurat object name: d3
+#' total_gn <- rownames(d3)
+#' res2 <- lr_module(res, d3,total_gn)
+#' write.table(res2, paste(name,"_cell_addmodule", sep = ""), quote = F, sep = "\t")
+#'
+#' @export
+lr_module<-function(res, d, total_gn){
+	res1 <- c()
+	for (i in c(1:length(res))){
+                tmp_path_gn <- res[[i]]
+                path <- names(res)[i]
+		print(path)
+		path_gn<-intersect(tmp_path_gn, total_gn)
+		if (length(path_gn) < 3){
+			next
+		}
+		d1<-AddModuleScore(d, features = path_gn)
+		#d1<-AddModuleScore(d, features = path_gn, ctrl = length(path_gn))
+		pre_size <- dim(d@meta.data)[2]
+		pre_size <- pre_size + 1
+		d2<-apply(d1@meta.data[,pre_size:dim(d1@meta.data)[2]], 1, mean)
+
+		res1<-rbind(res1, d2)
+		rownames(res1)[dim(res1)[1]] <- path
+	}
+	return(res1)
+}
 
