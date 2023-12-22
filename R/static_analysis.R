@@ -190,7 +190,7 @@ generate_table_for_analysis <- function(name, meta_info, pat_info, sample_info, 
 				if(length(new_col) != dim(p1)[2]){
 					p1<-t(p1)
 					p1<-data.frame(p1)
-					p1_1<-p1[new_col,]
+					p1_1<-p1[new_col,, drop = F]
 					rownames(p1_1)<-new_col
 					p1<-t(p1_1)
 					a2 <- cbind(p1, p1_2)
@@ -199,7 +199,7 @@ generate_table_for_analysis <- function(name, meta_info, pat_info, sample_info, 
 				if (length(new_col) != dim(p2)[2]){
 					p2<-t(p2)
                                         p2<-data.frame(p2)
-                                        p2_1<-p2[new_col,]
+                                        p2_1<-p2[new_col,, drop = F]
                                         rownames(p2_1)<-new_col
                                         p2<-t(p2_1)
                                         total_table <- cbind(p2, p2_2)
