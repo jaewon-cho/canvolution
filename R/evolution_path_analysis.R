@@ -1139,7 +1139,7 @@ clone_cluster_weighted_lr_abundance <- function(meta_info, name, pat_info, sampl
 
         pat_list <- as.character(meta_info[,pat_info])
         sample_pat <- table(sample_list, pat_list)
-        pat_list_uniq <- colnames(sample_evolution_clone_abundance_mut_exp_corr_samplewisepat)
+	pat_list_uniq <- colnames(sample_pat)
 
         sample_pat_map <- apply(sample_pat, 1, function(x) which(x!=0))
 
@@ -1151,7 +1151,6 @@ clone_cluster_weighted_lr_abundance <- function(meta_info, name, pat_info, sampl
 
 	az <- read.csv(paste(abundance_file_prefix, name, "_clone_ratio.csv", sep = ""))
 	az1<-az[, 2:dim(az)[2]]
-n_clone_abundance_mut_exp_corr_samplewise
 	az2<-as.matrix(az1)
 	rownames(az2)<-az$X
 	az2<-data.frame(az2)
@@ -1303,6 +1302,37 @@ n_clone_abundance_mut_exp_corr_samplewise
         }
 }
 
+
+#' evolution_clone_abundance_mut_exp_corr_samplewise
+#'
+#' Correlation analysis between clonal abundance and score from mut_exp in each clone in each evolution path
+#'
+#' @param meta_info seurat_obj@meta.data
+#' @param name title for your data
+#' @param pat_info variable name for patient in the "meta_info"
+#' @param sample_info variable name for sample in the "meta_info"
+#' @param cluster_info expression based cluster variable name for sample in the "meta_info" (ex: seurat_clusters)
+#' @param clone_path_file_prefix prefix of clone path file
+#' @param feature_file_prefix prefix of feature file
+#' @param abundance_file_prefix prefix of abundance file
+#' @param output_file_prefix prefix of outputfile
+#' @param cell_cnt_thr threshold for excluding clones less than the given cell count
+#'
+#' @return Correlation analysis between each evolution path and mutational features
+#'
+#' @examples
+#' #meta_info <- seurat_obj@meta.data
+#' meta_info <- read.table("data/meta_info_lung", sep = "\t", check.names = F)
+#' name <- "lung"
+#' pat_info <- "pat_collapse"
+#' sample_info <- "sample_name"
+#' cluster_info <- "seurat_clusters"
+#' clone_path_file_prefix <- "data/robustclone/"
+#' abundance_file_prefix <- "data/"
+#' output_file_prefix <- "./"
+#' evolution_clone_abundance_mut_exp_corr_samplewise(meta_info, name, pat_info, sample_info, cluster_info, clone_path_file_prefix, feature_file_prefix, abundance_file_prefix, output_file_prefix)
+#'
+#' @export
 
 evolution_clone_abundance_mut_exp_corr_samplewise <- function(meta_info, name, pat_info, sample_info, clone_path_file_prefix, feature_file_prefix, abundance_file_prefix, output_file_prefix, cell_cnt_thr=10){
         sample_list <- as.character(meta_info[,sample_info])
