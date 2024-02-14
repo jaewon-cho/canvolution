@@ -1,13 +1,12 @@
 Package: canvolution
-Title:  Analyzing cancer evolution with full-length scRNA-seq
+Title: Analyzing cancer evolution with full-length scRNA-seq
 Version: 0.0.0.9000
 Authors@R: 
     person("JAE-WON", "CHO", , "jcho20@bwh.harvard.edu", role = c("aut", "cre"),
 	   comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: Analyzing cancer evolution with full-length scRNA-seq
 Depends: R (>= 4.1.2)
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 LazyData: true
