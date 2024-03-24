@@ -479,3 +479,6 @@ genes <- common_mutation_from_path(path_list_info, "all", F)
 
 ##  Citation
 
+Joint analysis of mutational and transcriptional landscapes in human cancer reveals key perturbations during cancer evolution
+Genome Biol. 2024; 25: 65
+doi: 10.1186/s13059-024-03201-1
